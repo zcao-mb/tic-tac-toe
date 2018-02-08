@@ -8,25 +8,16 @@ export class Board extends React.Component {
     }
 
     render() {
+        let self = this;
+        if(! Array.isArray(self.props.squares)) return <div></div>;
 
-        return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0, 0)}
-                    {this.renderSquare(0, 1)}
-                    {this.renderSquare(0, 2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(1, 0)}
-                    {this.renderSquare(1, 1)}
-                    {this.renderSquare(1, 2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(2, 0)}
-                    {this.renderSquare(2, 1)}
-                    {this.renderSquare(2, 2)}
-                </div>
-            </div>
-        );
+        let board = this.props.squares.map(function(rows, x) {
+            let cells = rows.map(function(cols, y) {
+                return <Square key={x*10 + y} value={self.props.squares[x][y]} onClick={() => self.props.onClick(x, y)} />;
+            })
+            return <div key={x} className="board-row">{cells}</div>;
+        });
+
+        return <div>{board}</div>;
     }
 }

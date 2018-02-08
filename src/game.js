@@ -5,9 +5,17 @@ export class Game extends React.Component {
 
     constructor(props) {
         super(props);
+
+        const size = 4;
+        const squares = [];
+        for(let i=0; i<size; i++) {
+            const row = new Array(size).fill('');
+            squares.push(row);
+        }
+
         this.players = ['X', 'O'];
         this.state = {
-            squares: [['', '', ''], ['', '', ''], ['', '', '']],
+            squares: squares,
             steps: 0,
             next: this.players[0],
             gameOver: false,
@@ -39,26 +47,29 @@ export class Game extends React.Component {
     }
 
     handleClick(x, y) {
-        
+
         if (this.state.gameOver === true) return;
         if (this.state.squares[x][y]) return;
+
         const squares = this.state.squares.slice();
+        const size = squares.length;
 
         squares[x][y] = this.state.next;
 
         const steps = this.state.steps + 1;
         const next = this.players[steps % 2];
+
         let gameOver = this.state.gameOver;
         const winner = this.calculateWinner(squares);
         if (winner && winner !== '') gameOver = true;
-        else if (steps >= 9) gameOver = true;
+        else if (steps >= size * size) gameOver = true;
 
         const state = { squares: squares, next: next, steps: steps, winner: winner, gameOver: gameOver };
         this.setState(state);
     }
 
     calculateWinner(squares) {
-        const size = 3;
+        const size = squares.length;
 
         // check the rows
         let value = null;
